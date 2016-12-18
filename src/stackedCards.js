@@ -62,10 +62,6 @@
 
                 el.style.transformOrigin = me.config.transformOrigin;
 
-                if(me.config.layout=="fanOut") {
-                    el.style.width = "65%";
-                }
-
                 el.addEventListener("click", function() {
 
                     if(el.classList.contains("active")) return false;
