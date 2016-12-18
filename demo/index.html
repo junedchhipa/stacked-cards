@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Document</title>
+
+	<link href="../dist/stackedCards.css" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<link href="css/highlight.css" rel="stylesheet">
+
+	<script src="https://cdn.jsdelivr.net/highlight.js/9.9.0/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+
+	<style>
+		*, *:before, *:after {
+			box-sizing: border-box;
+		}
+		body {
+			color: #444;
+		}
+		html {
+			height: 100%;
+		}
+		body {
+			font-family: "Roboto", sans-serif;
+			width:  100%;
+			height: 100%;
+			min-height: 100%;
+			margin: 0px;
+			padding: 0px;
+			background-color: #eee;
+		}
+
+		.stacked-cards h2 {
+			text-align: center;
+			position: relative;
+			top: -20px;
+		}
+
+		.intro {
+			max-width: 600px;
+			margin: 20px auto;
+			text-align: center;
+		}
+
+		.container-fuild {
+			max-width: 80%;
+			margin: 0 auto;
+		}
+
+		.container-fixed {
+			max-width: 767px;
+			margin: 0 auto;
+		}
+
+		.divider {
+			max-width: 500px;
+			margin: 25px auto;
+			background-color: #ccc;
+			height: 2px;
+			width: 100%;
+		}
+
+		.stacked-cards {
+			padding-top: 40px;
+			padding-bottom: 15px;
+		}
+
+		.stacked-cards-fanOut {
+			padding-bottom: 40px;
+		}
+
+		.stacked-cards-fanOut li img {
+			max-height: 200px;
+		}
+
+		.stacked-cards li {
+			height: 250px;
+		}
+
+		.stacked-cards li {
+			background-color: #00bcd4;
+		}
+
+		.stacked-cards li:nth-child(1) {
+			background-color: #3599db;
+		}
+
+		.stacked-cards li:nth-child(2) {
+			background-color: #e61b77;
+		}
+
+		.stacked-cards li:nth-child(3) {
+			background-color: #00bcd4;
+		}
+
+		.stacked-cards li:nth-child(4) {
+			background-color: #f4b251;
+		}
+
+		.stacked-cards li:nth-child(5) {
+			background-color: #8e4497;
+		}
+
+		.source {
+			margin: 25px auto;
+		}
+
+		.header {
+			margin: 0px auto;
+			padding: 25px 5px;
+			background-color: #fff;
+		}
+		.header img {
+			display: block;
+			margin: 0 auto;
+			max-width: 300px;
+			height: auto;
+		}
+
+		
+	</style>
+
+</head>
+<body>
+	
+	<div id="wrap">
+		<div class="header">
+			<img src="img/logo.png" alt="Stacked Cards">
+			<div class="intro">
+				Give your content boxes a stacked cards look with each card swapping with other.
+			</div>
+			
+		</div>
+		<div class="container-fixed stacked-cards stacked-cards-slide">
+			<h2>Slide</h2>
+			<ul>
+				<li>
+				</li>
+				<li>
+				</li>
+				<li>
+				</li>
+				<li>
+				</li>
+				<li>
+				</li>
+			</ul>
+		</div>
+
+		<div class="container-fixed source">
+<pre>
+<code class="javascript">
+	var stackedCard = new stackedCards({
+	 	selector: '.stacked-cards',
+	 	layout: "slide",
+	 	transformOrigin: "center",
+	});
+
+	stackedCard.init();
+
+</code>
+</pre>
+		</div>
+
+		<div class="divider"></div>
+
+		<div class="container-fixed stacked-cards stacked-cards-fanOut">
+			<h2>FanOut</h2>
+			<ul>
+				<li>
+				</li>
+				<li>
+				</li>
+				<li>
+				</li>
+				<li>
+				</li>
+				<li>
+				</li>
+			</ul>
+		</div>
+
+		<div class="container-fixed source">
+<pre>
+<code class="javascript">
+	var stackedCard = new stackedCards({
+	 	selector: '.stacked-cards',
+	 	layout: "fanOut",
+	 	transformOrigin: "bottom",
+	});
+
+	stackedCard.init();
+
+</code>
+</pre>
+		</div>
+
+		<div class="divider"></div>
+
+		<div class="container-fixed stacked-cards stacked-cards-coverflow">
+			<h2>Coverflow</h2>
+			<ul>
+				<li>
+				</li>
+				<li>
+				</li>
+				<li>
+				</li>
+				<li>
+				</li>
+				<li>
+				</li>
+			</ul>
+		</div>
+
+		<div class="container-fixed source">
+<pre>
+<code class="javascript">
+	var stackedCard = new stackedCards({
+	 	selector: '.stacked-cards',
+	 	layout: "coverflow",
+	 	transformOrigin: "center",
+	});
+
+	stackedCard.init();
+
+</code>
+</pre>
+		</div>
+
+		<div class="divider"></div>
+
+		<br><br>
+
+		<div class="container-fixed">
+			<h2>Usage</h2>
+			<p>
+				1. Setup HTML Markup
+				<div class="source">
+					<pre>
+						<code class="html">
+	&lt;div class="mycards"&gt;
+		&lt;ul&gt;
+			&lt;li&gt;your content&lt;/li&gt;
+			&lt;li&gt;your content&lt;/li&gt;
+			&lt;li&gt;your content&lt;/li&gt;
+			&lt;li&gt;your content&lt;/li&gt;
+			&lt;li&gt;your content&lt;/li&gt;
+		&lt;/ul&gt;
+	&lt;/div&gt;
+						</code>
+					</pre>
+				</div>
+			</p>
+
+			<p>
+				2. Add stackedCards.css &amp; stackedCards.js into &lt;head&gt; You may add stackedCards.js before your closing &lt;/body&gt; tag
+				<div class="source">
+					<pre>
+						<code class="html">
+	&lt;link rel="stylesheet" type="text/css" href="stackedCards.css"/&gt;
+	&lt;script src="stackedCards.js"&gt;&lt;script&gt;
+						</code>
+					</pre>
+				</div>
+			</p>
+
+			<p>
+				3. Initialize the stackedCards in your script file
+				<div class="source">
+					<pre>
+						<code class="javascript">
+	var stackedCard = new stackedCards({
+	 	selector: '.mycards',
+	 	layout: "coverflow",
+	 	transformOrigin: "center",
+	});
+
+	stackedCard.init();
+
+						</code>
+					</pre>
+				</div>
+			</p>
+		</div>
+
+		<div class="container-fixed" style="text-align: center;">
+			<a href="#">Checkout on Github</a>
+		</div>
+
+		<br>
+
+	</div>
+
+	<script src="../dist/stackedCards.min.js"></script>
+
+	<script>
+		var stackedCardSlide = new stackedCards({
+		 	selector: '.stacked-cards-slide',
+		 	layout: "slide",
+		 	transformOrigin: "center",
+		 });
+
+		stackedCardSlide.init();
+
+		var stackedCardFanOut = new stackedCards({
+		 	selector: '.stacked-cards-fanOut',
+		 	layout: "fanOut",
+		 	transformOrigin: "bottom",
+		 });
+
+		stackedCardFanOut.init();
+
+		var stackedCardCoverFlow = new stackedCards({
+		 	selector: '.stacked-cards-coverflow',
+		 	layout: "coverflow",
+		 	transformOrigin: "center",
+		 });
+
+		stackedCardCoverFlow.init();
+	</script>
+</body>
+</html>
