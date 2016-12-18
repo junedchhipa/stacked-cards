@@ -20,7 +20,7 @@
     transition: 0.5s ease transform;
 }
 @media screen and (max-width: 480px) {
-    .stacked-cards ul {
+    /*.stacked-cards ul {
       max-width: 80%;
     }
     .stacked-cards li {
@@ -32,7 +32,7 @@
         height: auto;
         box-shadow: 0 2px 5px 0px #333;
         transform: translate3d(0, 0, 0) !important;
-    }
+    }*/
 }
 .stacked-cards li:after {
     bottom: 0;
@@ -54,8 +54,8 @@
     box-shadow: 0 5px 10px 0px #333;
 }
 @media screen and (min-width: 480px) {
-    .stacked-cards li.active {
+   /* .stacked-cards li.active {
         transform: translate(-50%, 0%) scale(1) rotate(0deg);
         transition: 0.5s ease transform;
-    }
+    }*/
 }
