@@ -1,10 +1,10 @@
-# ![JPG](http://lorempixel.com/100/100/)
+# ![JPG](demo/img/logo.png)
 Give your content boxes a stacked cards look with each card swapping with other. 
 
-![JPG](http://lorempixel.com/400/200/)
+![GIF](preview.gif)
 
 ## Demo
-[View demo](https://junedchhipa.github.io/catch-the-fruit/demo/)
+[View demo](https://junedchhipa.github.io/stacked-cards/)
 
 
 ## StackedCards Usage
