@@ -1,11 +1,17 @@
 # ![JPG](demo/img/logo_sm.png)
-Give your content boxes a stacked cards look with each card swapping with other. 
+Give your content boxes a stacked cards look. A different approach to carousels/sliders.
 
 ![GIF](preview.gif)
 
 ## Demo
 [View demo](https://junedchhipa.github.io/stacked-cards/)
 
+
+##### ver 1.1 updates:
+
+ - Swipe support added for mobile.
+ - Removed "swapping of the cards on click" and replaced with "moving elements" to preserve the order of rendering.
+ - Removed coverflow effect (transforms causing lot of trouble with z-index)
 
 ## StackedCards Usage
 
