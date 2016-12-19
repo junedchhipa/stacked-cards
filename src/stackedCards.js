@@ -1,5 +1,5 @@
 /*
-* Stacked Cards v1.0
+* Stacked Cards v1.1
 * Created: Dec 2016
 * Author: Juned Chhipa
 */
@@ -9,7 +9,7 @@
 
     this.stackedCards = (function() {
         stackedCards.prototype.defaults = {
-            layout: 'slide',                     // slide, fanOut, coverflow
+            layout: 'slide',                     // slide, fanOut
             onClick: undefined,                 // onclick event provided
             transformOrigin: "center",          // css transformOrigin
         };
@@ -44,6 +44,11 @@
             this.parent = els[0].parentNode;
 
             var getItemHeight = els[0].getBoundingClientRect().height;
+            
+            /*var liWidth = 0;
+            for(var q = 0;q<els.length; q++) {
+                liWidth = liWidth + els[q].getBoundingClientRect().width;
+            }*/
 
             els[0].parentNode.style.height = parseInt(getItemHeight) + "px";
             
@@ -53,13 +58,14 @@
             // oneHalf if the centerPoint - things go left and right from here
             var oneHalf = (els.length+lenAdjust)/2;
 
-            var styles = me.calculateInitialTransforms(els);
+            if(me.config.layout=="coverflow") {
+                this.parent.style.perspective = parseInt(this.parent.style.height)*3 + "px";
+            }
 
-            els[oneHalf].classList.add("active");
 
-            var activeTransform = styles.transform[oneHalf];
-            var activeZIndex = styles.zIndex[oneHalf];  
-            var activeRel = styles.rel[oneHalf];    
+            var activeTransform = "translate("+ -50 +"%, 0%)  scale(1)";
+
+            this.detectSwipe(); 
 
 
             Array.prototype.forEach.call(els, function(el) {
@@ -67,24 +73,6 @@
                 el.style.transformOrigin = me.config.transformOrigin;
 
                 el.addEventListener("click", function() {
-
-                    if(el.classList.contains("active")) return false;
-                    
-                    var index = el.getAttribute("rel");
-                    var sign = el.dataset.sign;
-
-                    var activeEls = document.querySelectorAll(selector + " li.active");
-
-                    Array.prototype.forEach.call(activeEls, function(aEl) {
-                        /*aEl.setAttribute("rel", index)
-                        aEl.style.transform = styles.transform[index];
-                        aEl.style.zIndex = styles.zIndex[index];
-
-                        aEl.classList.remove("pos");
-                        aEl.classList.remove("neg");
-                        aEl.classList.add(sign);
-                        aEl.dataset.sign = sign;*/
-                    });
 
                     var clickedEl = el;
                     var nextCnt = 0;
@@ -105,7 +93,7 @@
                         var prev = clickedEl.previousElementSibling;
                         prevCnt = prevCnt + 1; 
                     } while(clickedEl = clickedEl.previousElementSibling);
-
+                    
                     me.reCalculateTransformsOnClick(nextCnt - 1, prevCnt - 1)
 
                     me.loopNodeList(els, function(el) {
@@ -113,14 +101,12 @@
                     })
 
                     el.classList.add("active");
+                    el.classList.add(me.config.layout)
 
-                    el.style.transform = activeTransform;
+                    
 
                     el.style.zIndex = els.length*5;
-                    el.setAttribute("rel", activeRel);
-                    el.classList.remove("pos");
-                    el.classList.remove("neg");
-                    el.dataset.sign = "";
+                    el.style.transform = activeTransform;
 
                     if (me.config.onClick !== undefined) {
                          me.config.onClick(el);
@@ -128,131 +114,9 @@
 
                 });
             });
+
+            els[oneHalf].click();
               
-        }
-
-        stackedCards.prototype.calculateInitialTransforms = function(els) {
-            var z = 10;
-
-            var lenAdjust = (els.length%2==0 ? -2 : -1)
-
-            var oneHalf = (els.length+lenAdjust)/2;
-            var scale = 0.5, translateX = 0, rotateVal=0, rotate="";
-            var rotateNegStart = ((75 / els.length) * (oneHalf))*-1;
-
-            var parent = this.parent;
-
-            var transformArr = [];
-            var zIndexArr = [];
-            var relArr = [];
-
-            var layout = this.config.layout;       
-
-            for(var i=0; i<els.length; i++) {
-
-                els[i].setAttribute("rel", i);
-
-                relArr.push(i);
-                
-                var divisor = 100 / (els.length - 1);
-                
-                if(i<oneHalf) {
-                    scale = scale + (100 / (els.length+1))/100;
-                    if(layout=="fanOut") {
-                        if(i>0) {
-                            rotateNegStart = rotateNegStart + (75 / els.length);
-                        }
-                        rotateVal = rotateNegStart;
-                    }
-                    else if(layout=="coverflow") {
-                        scale = 0.75;
-                        rotateVal = 45;
-                    }
-                    z = z + 1;
-                }
-                else if(i==oneHalf) {
-                    rotateVal = 0;
-                    if(layout=="coverflow") {
-                        // perspective was causing z-index problems, so a small hack to overcome it
-                        scale = scale + (100 / (els.length+1))/100;
-                        if(scale>1) scale = 1;
-                    }
-                    else {
-                        scale = 1;
-                    }
-                    z = z + 1;
-                }
-                else {
-                    scale = scale - (100 / (els.length+1))/100;
-                    if(layout=="fanOut") {
-                        rotateVal = rotateVal + (75 / els.length);
-                    }
-                    else if(layout=="coverflow") {
-                        rotateVal = -45;
-                        scale = 0.75;
-                    }
-                    z = z - 1;
-                }
-
-                switch(layout) {
-                    case "slide":
-                        translateX = (150 - ((divisor*2)*i)) * -1;
-                        rotate = "rotate(0deg)";
-                        els[i].classList.add("slide")
-                        break;
-                    case "coverflow":
-                        parent.style.perspective = parseInt(parent.style.height)*3 + "px";
-                        translateX = (150 - ((divisor*2)*i)) * -1;
-                        rotate = "rotateY("+rotateVal+"deg)";
-
-                        els[i].classList.add("coverflow");
-
-                        if(i<oneHalf) {
-                            els[i].dataset.sign = "pos";
-                            els[i].classList.add("pos");
-                        }
-                        else if(i>oneHalf) {
-                            els[i].dataset.sign = "neg";
-                            els[i].classList.add("neg");
-                        }
-
-                        break;
-                    case "fanOut":
-                        translateX = (100 - (divisor*i)) * -1;
-                        rotate = "rotate("+rotateVal+"deg)";
-                        els[i].classList.add("fanOut")
-
-                        if(i>0) {
-                            rotateNegStart = rotateNegStart + (75 / els.length);
-                        }
-                        rotateVal = rotateNegStart;
-                    
-                        break;
-                    default:
-                        translateX = (150 - ((divisor*2)*i)) * -1;
-                        rotate = "rotate(0deg)";
-
-                }
-               
-
-
-                var styleStr = "translate("+ translateX +"%, 0%)  scale("+scale+") " + rotate;
-
-                transformArr.push(styleStr);
-                zIndexArr.push(z);
-                
-
-                els[i].style.transform = styleStr;
-                els[i].style.zIndex = z;
-            
-
-            }
-
-            return {
-                transform: transformArr,
-                zIndex: zIndexArr,
-                rel: relArr
-            }
         }
 
         stackedCards.prototype.reCalculateTransformsOnClick = function(nextCnt, prevCnt) {
@@ -280,56 +144,39 @@
             else {
                 scale = 1 - ((prevCnt) *(1/(nextCnt+1)));
             }
-            
-
-            console.log(scale)
-            
+                        
             var rotatePrevStart = ((prevCnt*10 / (prevCnt) * prevCnt))*-1;
             var rotateNextStart = ((nextCnt*10 / (nextCnt)));
 
             for(var i=0; i<prevCnt; i++) {
                 switch(layout) {
-                    case "slide":
-                        /*scale = scale + (100 / (prevCnt+1))/100;
-                        translateX = (150 - ((100 / (prevCnt))*(i))) * -1;*/
-                        
+                    case "slide":                        
                         if(i>0) {
                             scale = scale + (100 / (maxCntDivisor+1))/100;
                         }
                         
-
-                       // console.log(scale)
                         translateX = (-50 - ((prevDivisor)*(prevCnt-i)));
 
-
                         rotate = "rotate(0deg)";
-                        els[i].classList.add("slide")
                         break;
                     case "coverflow":
-                        scale = scale + (100 / (prevCnt+1))/100;
-                        translateX = (150 - ((prevDivisor)*(i))) * -1;
-                        if(prevCnt==1) {
-                            translateX = (100 - ((prevDivisor)*(i))) * -1;
+                        if(i>0) {
+                            scale = scale + (100 / (maxCntDivisor+1))/100;
                         }
+                        
+                        translateX = (-50 - ((prevDivisor)*(prevCnt-i)));
 
                         rotate = "rotateY(45deg)";
 
-                        els[i].dataset.sign = "neg";
-                        els[i].classList.add("neg");
-
                         break;
                     case "fanOut":
-
-                        
                         rotateVal = rotatePrevStart;
 
-                        scale = scale + (100 / (prevCnt+1))/100;
-                        translateX = (150 - (prevDivisor*i)) * -1;
-                        if(prevCnt==1) {
-                            translateX = (100 - ((prevDivisor)*(i))) * -1;
+                        if(i>0) {
+                            scale = scale + (100 / (maxCntDivisor+1))/100;
                         }
+                        translateX = (-50 - ((prevDivisor)*(prevCnt-i)));
                         rotate = "rotate("+rotateVal+"deg)";
-                        els[i].classList.add("fanOut");
 
                         rotatePrevStart = rotatePrevStart + ((prevCnt*10) / prevCnt);
 
@@ -360,47 +207,23 @@
                 j = j + 1;
                 switch(layout) {
                     case "slide":
-                        //scale = scale - (100 / (nextCnt+1))/100;
-                        //translateX = (50 - ((nextDivisor)*(j))) * -1;
-
-
+                        scale = scale - (100 / (maxCntDivisor+1))/100;
+                        translateX = (50 - ((nextDivisor)*(j))) * -1;
+                        rotate = "rotate(0deg)";
+                        break;
+                    case "coverflow":
                         scale = scale - (100 / (maxCntDivisor+1))/100;
                         translateX = (50 - ((nextDivisor)*(j))) * -1;
 
-                        /*if(nextCnt==1) {
-                            translateX = (100 - ((nextDivisor)*(j))) * -1;
-                          //  scale = (100 / (prevCnt+1))/100;
-                        }*/
-                        rotate = "rotate(0deg)";
-                        els[i].classList.add("slide");
-                        break;
-                    case "coverflow":
-                        scale = scale - (100 / (nextCnt+1))/100;
-                        translateX = (50 - ((nextDivisor)*(j))) * -1;
-
-                        if(nextCnt==1) {
-                            translateX = (100 - ((nextDivisor)*(j))) * -1;
-                          //  scale = (100 / (prevCnt+1))/100;
-                        }
                         rotate = "rotateY(-45deg)";
-
-                        els[i].classList.add("coverflow");
-
-                        els[i].dataset.sign = "pos";
-                        els[i].classList.add("pos");
 
                         break;
                     case "fanOut":
                         rotateVal = rotateNextStart;
 
-                        scale = scale - (100 / (nextCnt+1))/100;
-                        translateX = (50 - (nextDivisor*j)) * -1;
-                        if(nextCnt==1) {
-                            translateX = (100 - ((nextDivisor)*(j))) * -1;
-                          //  scale = (100 / (prevCnt+1))/100;
-                        }
+                        scale = scale - (100 / (maxCntDivisor+1))/100;
+                        translateX = (50 - ((nextDivisor)*(j))) * -1;
                         rotate = "rotate("+rotateVal+"deg)";
-                        els[i].classList.add("fanOut");
 
                         rotateNextStart = rotateNextStart + ((nextCnt*10) / nextCnt);
                         break;
@@ -419,6 +242,22 @@
             }
 
     
+
+        }
+
+        stackedCards.prototype.detectSwipe = function() {
+            var me = this;
+            var regionEl = document.querySelector(me.config.selector);
+
+            me.detectSwipeDir(regionEl, function(swipedir){
+                var activeEl = document.querySelector(me.config.selector + " li.active");
+                if (swipedir =='left') {
+                    activeEl.nextElementSibling.click();
+                }
+                else if(swipedir=="right") {
+                    activeEl.previousElementSibling.click();
+                }
+            })
 
         }
 
@@ -461,7 +300,7 @@
 
         }
 
-        stackedCards.prototype.detectSwipe = function(el, callback) {
+        stackedCards.prototype.detectSwipeDir = function(el, callback) {
             
             //credits: http://www.javascriptkit.com/javatutors/touchevents2.shtml
 
@@ -471,7 +310,7 @@
             startY,
             distX,
             distY,
-            threshold = 125, //required min distance traveled to be considered swipe
+            threshold = 75, //required min distance traveled to be considered swipe
             restraint = 100, // maximum distance allowed at the same time in perpendicular direction
             allowedTime = 300, // maximum time allowed to travel that distance
             elapsedTime,
@@ -489,7 +328,7 @@
             }, false)
           
             touchsurface.addEventListener('touchmove', function(e){
-                e.preventDefault() // prevent scrolling when inside DIV
+               // e.preventDefault() // prevent scrolling when inside DIV
             }, false)
           
             touchsurface.addEventListener('touchend', function(e){

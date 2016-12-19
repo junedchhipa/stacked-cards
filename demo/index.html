@@ -91,23 +91,23 @@
 			background-color: #00bcd4;
 		}
 
-		.stacked-cards li:nth-child(1) {
+		.stacked-cards li:nth-child(n) {
 			background-color: #3599db;
 		}
 
-		.stacked-cards li:nth-child(2) {
+		.stacked-cards li:nth-child(2n) {
 			background-color: #e61b77;
 		}
 
-		.stacked-cards li:nth-child(3) {
+		.stacked-cards li:nth-child(3n) {
 			background-color: #00bcd4;
 		}
 
-		.stacked-cards li:nth-child(4) {
+		.stacked-cards li:nth-child(4n) {
 			background-color: #f4b251;
 		}
 
-		.stacked-cards li:nth-child(5) {
+		.stacked-cards li:nth-child(5n) {
 			background-color: #8e4497;
 		}
 
@@ -222,43 +222,8 @@
 </code>
 </pre>
 		</div>
-
-		<div class="divider"></div>
-
-		<div class="container-fixed stacked-cards stacked-cards-coverflow">
-			<h2>Coverflow</h2>
-			<ul>
-				<li>
-				</li>
-				<li>
-				</li>
-				<li>
-				</li>
-				<li>
-				</li>
-				<li>
-				</li>
-				<li>
-				</li>
-				<li>
-				</li>
-			</ul>
-		</div>
-
-		<div class="container-fixed source">
-<pre>
-<code class="javascript">
-	var stackedCard = new stackedCards({
-	 	selector: '.stacked-cards',
-	 	layout: "coverflow",
-	 	transformOrigin: "center",
-	});
-
-	stackedCard.init();
-
-</code>
-</pre>
-		</div>
+		
+		
 
 		<div class="divider"></div>
 
@@ -342,14 +307,6 @@
 		 });
 
 		stackedCardFanOut.init();
-
-		var stackedCardCoverFlow = new stackedCards({
-		 	selector: '.stacked-cards-coverflow',
-		 	layout: "coverflow",
-		 	transformOrigin: "center",
-		 });
-
-		stackedCardCoverFlow.init();
 	</script>
 </body>
 </html>
