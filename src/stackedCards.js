@@ -273,8 +273,14 @@
             var maxCntDivisor = Math.max(prevCnt, nextCnt);
             var prevDivisor = 100 / (maxCntDivisor);
             var nextDivisor = 100 / (maxCntDivisor);
-
-            scale = 1 - ((prevCnt) *(1/(nextCnt)));
+            
+            if(prevCnt>nextCnt) {
+                scale = 0 + (100 / (prevCnt+1))/100;
+            }
+            else {
+                scale = 1 - ((prevCnt) *(1/(nextCnt+1)));
+            }
+            
 
             console.log(scale)
             
@@ -286,8 +292,11 @@
                     case "slide":
                         /*scale = scale + (100 / (prevCnt+1))/100;
                         translateX = (150 - ((100 / (prevCnt))*(i))) * -1;*/
-
-                        scale = scale + (100 / (maxCntDivisor+1))/100;
+                        
+                        if(i>0) {
+                            scale = scale + (100 / (maxCntDivisor+1))/100;
+                        }
+                        
 
                        // console.log(scale)
                         translateX = (-50 - ((prevDivisor)*(prevCnt-i)));
