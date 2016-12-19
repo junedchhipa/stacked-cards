@@ -1,4 +1,4 @@
-# ![JPG](demo/img/logo.png)
+# ![JPG](demo/img/logo_sm.png)
 Give your content boxes a stacked cards look with each card swapping with other. 
 
 ![GIF](preview.gif)
@@ -31,7 +31,7 @@ Add stackedCards.css &amp; stackedCards.js into your &lt;head&gt; section. You m
 ```javascript
 	var stackedCard = new stackedCards({
 	 	selector: '.mycards',
-	 	layout: "coverflow",
+	 	layout: "slide",
 	 	transformOrigin: "center",
 	});
 

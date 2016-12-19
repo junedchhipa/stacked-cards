@@ -58,11 +58,6 @@
             // oneHalf if the centerPoint - things go left and right from here
             var oneHalf = (els.length+lenAdjust)/2;
 
-            if(me.config.layout=="coverflow") {
-                this.parent.style.perspective = parseInt(this.parent.style.height)*3 + "px";
-            }
-
-
             var activeTransform = "translate("+ -50 +"%, 0%)  scale(1)";
 
             this.detectSwipe(); 
@@ -159,16 +154,6 @@
 
                         rotate = "rotate(0deg)";
                         break;
-                    case "coverflow":
-                        if(i>0) {
-                            scale = scale + (100 / (maxCntDivisor+1))/100;
-                        }
-                        
-                        translateX = (-50 - ((prevDivisor)*(prevCnt-i)));
-
-                        rotate = "rotateY(45deg)";
-
-                        break;
                     case "fanOut":
                         rotateVal = rotatePrevStart;
 
@@ -210,13 +195,6 @@
                         scale = scale - (100 / (maxCntDivisor+1))/100;
                         translateX = (50 - ((nextDivisor)*(j))) * -1;
                         rotate = "rotate(0deg)";
-                        break;
-                    case "coverflow":
-                        scale = scale - (100 / (maxCntDivisor+1))/100;
-                        translateX = (50 - ((nextDivisor)*(j))) * -1;
-
-                        rotate = "rotateY(-45deg)";
-
                         break;
                     case "fanOut":
                         rotateVal = rotateNextStart;
