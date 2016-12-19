@@ -115,7 +115,8 @@
                     el.classList.add("active");
 
                     el.style.transform = activeTransform;
-                    el.style.zIndex = activeZIndex;
+
+                    el.style.zIndex = els.length*5;
                     el.setAttribute("rel", activeRel);
                     el.classList.remove("pos");
                     el.classList.remove("neg");
@@ -220,6 +221,12 @@
                         translateX = (100 - (divisor*i)) * -1;
                         rotate = "rotate("+rotateVal+"deg)";
                         els[i].classList.add("fanOut")
+
+                        if(i>0) {
+                            rotateNegStart = rotateNegStart + (75 / els.length);
+                        }
+                        rotateVal = rotateNegStart;
+                    
                         break;
                     default:
                         translateX = (150 - ((divisor*2)*i)) * -1;
@@ -249,7 +256,6 @@
         }
 
         stackedCards.prototype.reCalculateTransformsOnClick = function(nextCnt, prevCnt) {
-            console.log(nextCnt, prevCnt)
 
             var z = 10;
 
@@ -264,87 +270,126 @@
 
             var layout = this.config.layout; 
             var prevDivisor = 100 / (prevCnt);
-
-            console.log(prevDivisor)
+            var nextDivisor = 100 / (nextCnt);
+            
+            var rotatePrevStart = ((prevCnt*10 / (prevCnt) * prevCnt))*-1;
+            var rotateNextStart = ((nextCnt*10 / (nextCnt)));
 
             for(var i=0; i<prevCnt; i++) {
                 switch(layout) {
                     case "slide":
                         scale = scale + (100 / (prevCnt+1))/100;
                         translateX = (150 - ((prevDivisor)*(i))) * -1;
+                        if(prevCnt==1) {
+                            translateX = (100 - ((prevDivisor)*(i))) * -1;
+                          //  scale = (100 / (prevCnt+1))/100;
+                        }
                         rotate = "rotate(0deg)";
                         els[i].classList.add("slide")
                         break;
-                    /*case "coverflow":
-                        parent.style.perspective = parseInt(parent.style.height)*3 + "px";
-                        translateX = (150 - ((prevDivisor*2)*i)) * -1;
-                        rotate = "rotateY("+rotateVal+"deg)";
-
-                        els[i].classList.add("coverflow");
-
-                        if(i<oneHalf) {
-                            els[i].dataset.sign = "pos";
-                            els[i].classList.add("pos");
+                    case "coverflow":
+                        scale = scale + (100 / (prevCnt+1))/100;
+                        translateX = (150 - ((prevDivisor)*(i))) * -1;
+                        if(prevCnt==1) {
+                            translateX = (100 - ((prevDivisor)*(i))) * -1;
+                          //  scale = (100 / (prevCnt+1))/100;
                         }
-                        else if(i>oneHalf) {
-                            els[i].dataset.sign = "neg";
-                            els[i].classList.add("neg");
-                        }
+
+                        rotate = "rotateY(45deg)";
+
+                        els[i].dataset.sign = "neg";
+                        els[i].classList.add("neg");
 
                         break;
                     case "fanOut":
-                        translateX = (100 - (prevDivisor*i)) * -1;
+
+                        
+                        rotateVal = rotatePrevStart;
+
+                        scale = scale + (100 / (prevCnt+1))/100;
+                        translateX = (150 - (prevDivisor*i)) * -1;
+                        if(prevCnt==1) {
+                            translateX = (100 - ((prevDivisor)*(i))) * -1;
+                        }
                         rotate = "rotate("+rotateVal+"deg)";
-                        els[i].classList.add("fanOut")
+                        els[i].classList.add("fanOut");
+
+                        rotatePrevStart = rotatePrevStart + ((prevCnt*10) / prevCnt);
+
                         break;
                     default:
                         translateX = (150 - ((prevDivisor*2)*i)) * -1;
-                        rotate = "rotate(0deg)";*/
+                        rotate = "rotate(0deg)";
 
                 }
 
                 var styleStr = "translate("+ translateX +"%, 0%)  scale("+scale+") " + rotate;
+                
+                z = z + 1;
 
                 els[i].style.transform = styleStr;
                 els[i].style.zIndex = z;
 
             }
+            
+            // we are going for active element, so make it higher
+            z = z - 1;
+            
+            var j = 0;
 
-            for(var i=prevCnt; i<nextCnt+prevCnt; i++) {
+            rotateNegStart = 0;
+            scale = 1;
+            for(var i=prevCnt+1; i<nextCnt+prevCnt+1; i++) {
+                j = j + 1;
                 switch(layout) {
                     case "slide":
-                        scale = scale - (100 / (prevCnt+1))/100;
-                        translateX = (150 - ((prevDivisor)*(i))) * -1;
+                        scale = scale - (100 / (nextCnt+1))/100;
+                        translateX = (50 - ((nextDivisor)*(j))) * -1;
+
+                        if(nextCnt==1) {
+                            translateX = (100 - ((nextDivisor)*(j))) * -1;
+                          //  scale = (100 / (prevCnt+1))/100;
+                        }
                         rotate = "rotate(0deg)";
-                        els[i].classList.add("slide")
+                        els[i].classList.add("slide");
                         break;
-                    /*case "coverflow":
-                        parent.style.perspective = parseInt(parent.style.height)*3 + "px";
-                        translateX = (150 - ((prevDivisor*2)*i)) * -1;
-                        rotate = "rotateY("+rotateVal+"deg)";
+                    case "coverflow":
+                        scale = scale - (100 / (nextCnt+1))/100;
+                        translateX = (50 - ((nextDivisor)*(j))) * -1;
+
+                        if(nextCnt==1) {
+                            translateX = (100 - ((nextDivisor)*(j))) * -1;
+                          //  scale = (100 / (prevCnt+1))/100;
+                        }
+                        rotate = "rotateY(-45deg)";
 
                         els[i].classList.add("coverflow");
 
-                        if(i<oneHalf) {
-                            els[i].dataset.sign = "pos";
-                            els[i].classList.add("pos");
-                        }
-                        else if(i>oneHalf) {
-                            els[i].dataset.sign = "neg";
-                            els[i].classList.add("neg");
-                        }
+                        els[i].dataset.sign = "pos";
+                        els[i].classList.add("pos");
 
                         break;
                     case "fanOut":
-                        translateX = (100 - (prevDivisor*i)) * -1;
+                        rotateVal = rotateNextStart;
+
+                        scale = scale - (100 / (nextCnt+1))/100;
+                        translateX = (50 - (nextDivisor*j)) * -1;
+                        if(nextCnt==1) {
+                            translateX = (100 - ((nextDivisor)*(j))) * -1;
+                          //  scale = (100 / (prevCnt+1))/100;
+                        }
                         rotate = "rotate("+rotateVal+"deg)";
-                        els[i].classList.add("fanOut")
+                        els[i].classList.add("fanOut");
+
+                        rotateNextStart = rotateNextStart + ((nextCnt*10) / nextCnt);
                         break;
                     default:
-                        translateX = (150 - ((prevDivisor*2)*i)) * -1;
-                        rotate = "rotate(0deg)";*/
+                        translateX = (50 - ((prevDivisor*2)*i)) * -1;
+                        rotate = "rotate(0deg)";
 
                 }
+
+                z = z - 1;
 
                 var styleStr = "translate("+ translateX +"%, 0%)  scale("+scale+") " + rotate;
 
