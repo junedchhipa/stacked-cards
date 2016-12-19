@@ -269,8 +269,10 @@
             var relArr = [];
 
             var layout = this.config.layout; 
-            var prevDivisor = 100 / (prevCnt);
-            var nextDivisor = 100 / (nextCnt);
+
+            var maxCntDivisor = Math.max(prevCnt, nextCnt);
+            var prevDivisor = 100 / (maxCntDivisor);
+            var nextDivisor = 100 / (maxCntDivisor);
             
             var rotatePrevStart = ((prevCnt*10 / (prevCnt) * prevCnt))*-1;
             var rotateNextStart = ((nextCnt*10 / (nextCnt)));
@@ -278,12 +280,12 @@
             for(var i=0; i<prevCnt; i++) {
                 switch(layout) {
                     case "slide":
-                        scale = scale + (100 / (prevCnt+1))/100;
+                        scale = scale + (100 / (maxCntDivisor+1))/100;
                         translateX = (150 - ((prevDivisor)*(i))) * -1;
-                        if(prevCnt==1) {
+                        /*if(prevCnt==1) {
                             translateX = (100 - ((prevDivisor)*(i))) * -1;
                           //  scale = (100 / (prevCnt+1))/100;
-                        }
+                        }*/
                         rotate = "rotate(0deg)";
                         els[i].classList.add("slide")
                         break;
@@ -343,13 +345,17 @@
                 j = j + 1;
                 switch(layout) {
                     case "slide":
-                        scale = scale - (100 / (nextCnt+1))/100;
+                        //scale = scale - (100 / (nextCnt+1))/100;
+                        //translateX = (50 - ((nextDivisor)*(j))) * -1;
+
+
+                        scale = scale - (100 / (maxCntDivisor+1))/100;
                         translateX = (50 - ((nextDivisor)*(j))) * -1;
 
-                        if(nextCnt==1) {
+                        /*if(nextCnt==1) {
                             translateX = (100 - ((nextDivisor)*(j))) * -1;
                           //  scale = (100 / (prevCnt+1))/100;
-                        }
+                        }*/
                         rotate = "rotate(0deg)";
                         els[i].classList.add("slide");
                         break;
