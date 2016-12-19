@@ -261,7 +261,7 @@
 
             var els = this.nodelistToArray(this.els);
 
-            var scale = 0, translateX = 0, rotateVal=0, rotate="";
+            var scale = 1, translateX = 0, rotateVal=0, rotate="";
             var rotateNegStart = 0// ((75 / els.length) * (oneHalf))*-1;
 
             var transformArr = [];
@@ -273,6 +273,10 @@
             var maxCntDivisor = Math.max(prevCnt, nextCnt);
             var prevDivisor = 100 / (maxCntDivisor);
             var nextDivisor = 100 / (maxCntDivisor);
+
+            scale = 1 - ((prevCnt) *(1/(nextCnt)));
+
+            console.log(scale)
             
             var rotatePrevStart = ((prevCnt*10 / (prevCnt) * prevCnt))*-1;
             var rotateNextStart = ((nextCnt*10 / (nextCnt)));
@@ -280,12 +284,15 @@
             for(var i=0; i<prevCnt; i++) {
                 switch(layout) {
                     case "slide":
+                        /*scale = scale + (100 / (prevCnt+1))/100;
+                        translateX = (150 - ((100 / (prevCnt))*(i))) * -1;*/
+
                         scale = scale + (100 / (maxCntDivisor+1))/100;
-                        translateX = (150 - ((prevDivisor)*(i))) * -1;
-                        /*if(prevCnt==1) {
-                            translateX = (100 - ((prevDivisor)*(i))) * -1;
-                          //  scale = (100 / (prevCnt+1))/100;
-                        }*/
+
+                       // console.log(scale)
+                        translateX = (-50 - ((prevDivisor)*(prevCnt-i)));
+
+
                         rotate = "rotate(0deg)";
                         els[i].classList.add("slide")
                         break;
@@ -294,7 +301,6 @@
                         translateX = (150 - ((prevDivisor)*(i))) * -1;
                         if(prevCnt==1) {
                             translateX = (100 - ((prevDivisor)*(i))) * -1;
-                          //  scale = (100 / (prevCnt+1))/100;
                         }
 
                         rotate = "rotateY(45deg)";
