@@ -43,14 +43,9 @@
 
             this.parent = els[0].parentNode;
 
-            var getItemHeight = els[0].getBoundingClientRect().height;
-            
-            /*var liWidth = 0;
-            for(var q = 0;q<els.length; q++) {
-                liWidth = liWidth + els[q].getBoundingClientRect().width;
-            }*/
-
-            els[0].parentNode.style.height = parseInt(getItemHeight) + "px";
+            // Sets height of cards adjusted to the height of the content of the tallest card
+            var getItemHeight = me.getHeight().max; 
+            els.forEach(item => item.style.height = parseInt(getItemHeight) + "px");
             
             // to get the active element's position, we will have to know if elements are in even/odd count
             var lenAdjust = (els.length%2==0 ? -2 : -1)
@@ -114,11 +109,26 @@
               
         }
 
-        stackedCards.prototype.reCalculateTransformsOnClick = function(nextCnt, prevCnt) {
+        stackedCards.prototype.getHeight = function() {
 
+            var es = this.nodelistToArray(this.els);
+
+            var elHeights = els.map(item => item.scrollHeight).sort((a, b)=>b-a);
+            var maxHeight = elHeights[0];
+
+            return { heights: elHeights, max: maxHeight };
+        }
+
+        stackedCards.prototype.reCalculateTransformsOnClick = function(nextCnt, prevCnt) {
+            var me = this;
+            var maxHeight = me.getHeight().max;
+            var vertOffsets = me.getHeight().heights.map(item=> Math.round((( 1 - ( item / maxHeight )) * -100) ));
+            
             var z = 10;
 
             var els = this.nodelistToArray(this.els);
+
+            els[0].parentNode.style.height = parseInt(me.getHeight().max) + "px";
 
             var scale = 1, translateX = 0, rotateVal=0, rotate="";
             var rotateNegStart = 0// ((75 / els.length) * (oneHalf))*-1;
@@ -151,6 +161,7 @@
                         }
                         
                         translateX = (-50 - ((prevDivisor)*(prevCnt-i)));
+                        translateY = vertOffsets[i] / 2;
 
                         rotate = "rotate(0deg)";
                         break;
@@ -194,6 +205,8 @@
                     case "slide":
                         scale = scale - (100 / (maxCntDivisor+1))/100;
                         translateX = (50 - ((nextDivisor)*(j))) * -1;
+                        translateY = vertOffsets[i] / 2;
+
                         rotate = "rotate(0deg)";
                         break;
                     case "fanOut":
