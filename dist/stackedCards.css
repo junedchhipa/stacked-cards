@@ -28,6 +28,9 @@
     right: 0;
     top: 0;
 }
+.stacked-cards li.active:after {
+    display: none;
+}
 .stacked-cards li img {
     position: relative;
     display: block;
